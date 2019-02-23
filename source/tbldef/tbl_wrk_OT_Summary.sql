@@ -1,0 +1,23 @@
+CREATE TABLE [tbl_wrk_OT_Summary] (
+  [Unit_Code] VARCHAR (4),
+  [Stream_Name] VARCHAR (50),
+  [Visit_Year] SHORT ,
+  [Reach_ID] SHORT ,
+  [Utah_Species] VARCHAR (50),
+  [Tree_Total] SHORT ,
+  [DBH25_30] SHORT ,
+  [DBH30_40] SHORT ,
+  [DBH40_50] SHORT ,
+  [DBH50_60] SHORT ,
+  [DBH60_70] SHORT ,
+  [DBH70_80] SHORT ,
+  [DBH80_90] SHORT ,
+  [DBH90_100] SHORT ,
+  [Over100] SHORT ,
+  [CH1] DOUBLE ,
+  [CH2] DOUBLE ,
+  [CH3] DOUBLE ,
+  [CH4] DOUBLE ,
+  [CH5] DOUBLE ,
+  [NCH] DOUBLE 
+)

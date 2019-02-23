@@ -1,0 +1,15 @@
+﻿dbMemo "SQL" ="SELECT qry_Tree_Size.Unit_Code, Stream_Name, qry_Tree_Size.Plot_ID, qry_Tree_Siz"
+    "e.Visit_Year, qry_Tree_Size.Transect, qry_Tree_Size.Tree_Species, qry_Tree_Size."
+    "Alive, qry_Tree_Size.Tree_Size, qry_Tree_Size.Tree_Count\015\012FROM qry_Tree_Si"
+    "ze\015\012UNION ALL SELECT qry_Tree_Seedling.Unit_Code, Stream_Name, qry_Tree_Se"
+    "edling.Plot_ID, qry_Tree_Seedling.Visit_Year, qry_Tree_Seedling.Transect, qry_Tr"
+    "ee_Seedling.Tree_Species, qry_Tree_Seedling.Alive, qry_Tree_Seedling.Tree_Size, "
+    "qry_Tree_Seedling.Tree_Count\015\012FROM qry_Tree_Seedling;\015\012"
+dbMemo "Connect" =""
+dbBoolean "ReturnsRecords" ="-1"
+dbInteger "ODBCTimeout" ="60"
+dbBoolean "OrderByOn" ="0"
+dbByte "Orientation" ="0"
+dbByte "DefaultView" ="2"
+Begin
+End

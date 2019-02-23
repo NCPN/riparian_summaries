@@ -1,0 +1,22 @@
+CREATE TABLE [tbl_wrk_Cover_Pct_Lifeform_GS] (
+  [UnitCode] VARCHAR (4),
+  [Stream_Name] VARCHAR (50),
+  [PlotID] SHORT ,
+  [Geomorph] VARCHAR (50),
+  [TreeL] DOUBLE ,
+  [TreeA] DOUBLE ,
+  [ShrubL] DOUBLE ,
+  [ShrubA] DOUBLE ,
+  [AGrassL] DOUBLE ,
+  [AGrassA] DOUBLE ,
+  [PGrassL] DOUBLE ,
+  [PGrassA] DOUBLE ,
+  [ForbL] DOUBLE ,
+  [ForbA] DOUBLE ,
+  [FernL] DOUBLE ,
+  [FernA] DOUBLE ,
+  [VineL] DOUBLE ,
+  [VineA] DOUBLE ,
+  [Total_Live] DOUBLE ,
+  [Total_Cover] DOUBLE 
+)

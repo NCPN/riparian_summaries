@@ -1,0 +1,23 @@
+CREATE TABLE [tbl_wrk_SR_Richness] (
+  [Unit_Code] VARCHAR (255),
+  [Stream_Name] VARCHAR (50),
+  [Visit_Year] SHORT ,
+  [Plot_ID] SHORT ,
+  [TotalA] SHORT ,
+  [TotalE] SHORT ,
+  [TreeA] LONG ,
+  [TreeE] LONG ,
+  [ShrubA] SHORT ,
+  [ShrubE] SHORT ,
+  [PerennialGrassA] SHORT ,
+  [PerennialGrassE] SHORT ,
+  [AnnualGrassA] LONG ,
+  [AnnualGrassE] LONG ,
+  [Forb_HerbA] LONG ,
+  [Forb_HerbE] LONG ,
+  [FernA] LONG ,
+  [FernE] LONG ,
+  [VineA] LONG ,
+  [VineE] LONG ,
+   CONSTRAINT [PrimaryKey] PRIMARY KEY ([Unit_Code], [Plot_ID])
+)
