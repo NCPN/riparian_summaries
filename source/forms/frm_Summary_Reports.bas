@@ -15,10 +15,9 @@ Begin Form
     Width =14400
     DatasheetFontHeight =9
     ItemSuffix =56
-    Left =675
-    Top =1020
-    Right =15075
-    Bottom =9645
+    Left =945
+    Right =15345
+    Bottom =7665
     DatasheetGridlinesColor =12632256
     RecSrcDt = Begin
         0x1385341e7574e340
@@ -4564,7 +4563,19 @@ Err_CoverWetland_Click:
     MsgBox Err.Description
     Resume Exit_CoverWetland_Click
 End Sub
-
+' --------------------------------------------------------------------------------------------
+' Sub:          ButtonExoticFrequency_Click
+' Description:  Generates exotic frequency summary.
+' Assumptions:  -
+' Parameters:   -
+' Returns:      -
+' Throws:       -
+' References:   -
+' Source/date:  Russ DenBleyker, 2010
+' Adapted:      -
+' Revisions:
+'   H. Thomas - 2/28/2019 - Fixed issue with number of quadrats sampled calculation (Quad_Count).
+' ----------------------------------------------------------------------------------------------
 Private Sub ButtonExoticFrequency_Click()
 On Error GoTo Err_ExoticFrequency_Click
 
@@ -4607,7 +4618,7 @@ On Error GoTo Err_ExoticFrequency_Click
   ' Get basic point info
    Set points = db.OpenRecordset(strSQL)
    If points.EOF Then
-     MsgBox "No valid Exotic records found."
+     MsgBox "No valid exotic frequency records found."
      points.Close
      Set points = Nothing
      GoTo Exit_ExoticFrequency_Click
@@ -4624,6 +4635,8 @@ On Error GoTo Err_ExoticFrequency_Click
    Quad_Count = 0
    Do Until points.EOF
      If PlotSave <> points!Unit_Code & points!Plot_ID Then  ' Check for new plot code
+       ' Calculate number of quadrats sampled
+       Quad_Count = calculateQuadratsSampled(PlotSave)
        ' Now write reach record
        Set WorkOutput = db.OpenRecordset("tbl_wrk_Exotic_Frequency_Summary")
        ArrayIndex = 0
@@ -4650,7 +4663,6 @@ On Error GoTo Err_ExoticFrequency_Click
          ArrayIndex = ArrayIndex + 1
        Loop
      End If
-     Quad_Count = Quad_Count + 20
      ArrayIndex = 0
      Do Until ArrayIndex > 24
        If PlotArray(ArrayIndex, 0) = " " Then
@@ -4673,7 +4685,9 @@ On Error GoTo Err_ExoticFrequency_Click
      points.MoveNext
    Loop   ' Loop for Points input file
 
-   ' Output last plot record
+      ' Calculate number of quadrats sampled
+      Quad_Count = calculateQuadratsSampled(PlotSave)
+      ' Output last plot record
        Set WorkOutput = db.OpenRecordset("tbl_wrk_Exotic_Frequency_Summary")
        ArrayIndex = 0
        Do Until ArrayIndex > 24 Or PlotArray(ArrayIndex, 0) = " "  ' Write species totals for plot
@@ -8273,3 +8287,79 @@ Err_TotalCover_Click:
     Resume Exit_TotalCover_Click
     
 End Sub
+
+' --------------------------------------------------------------------------------------------
+' Function:     calculateQuadratsSampled
+' Description:  Calculates the number of exotic frequency quadrats sampled for a given reach.
+' Assumptions:  -
+' Parameters:   ParkReach (variant), a concatenation of:
+'                  park code and reach number, e.g. ARCH5
+' Returns:      Integer representing number of quadrats sampled for reach
+' Throws:       -
+' References:   -
+' Source/date:  Helen Thomas, 2/28/2019
+' Adapted:      -
+' Revisions:
+' ----------------------------------------------------------------------------------------------
+Private Function calculateQuadratsSampled(ParkReach As Variant) As Integer
+On Error GoTo Err_Handler
+
+  Dim parkCode, strSQL As String
+  Dim ReachID As Integer
+  Dim db As DAO.Database
+  Dim rs As DAO.Recordset
+  Dim QuadratLocation As Integer
+
+    calculateQuadratsSampled = 0
+    
+    'Extract park code and reachID
+    parkCode = Left(ParkReach, 4)
+    ReachID = Right(ParkReach, Len(ParkReach) - 4)
+    
+    'Create SQL statement
+    strSQL = "SELECT * FROM qry_Transect_Lengths " & _
+             "WHERE Unit_Code = '" & parkCode & "' AND Plot_ID = " & ReachID
+    
+    'Get transect length records
+    Set db = CurrentDb
+    Set rs = db.OpenRecordset(strSQL)
+       
+    If (rs.BOF And rs.EOF) Then
+        MsgBox "No transect length records found. " & _
+               "Unable to calculate the number of exotic frequency quadrats sampled."
+        GoTo Exit_Function
+    End If
+    
+    'Calculate number of quadrats sampled for each transect
+    rs.MoveFirst
+    Do Until rs.EOF
+        QuadratLocation = 0
+        Do Until QuadratLocation > 95
+            'Quadrats are 2 m long
+            'So transect must extend at least 2 m beyond quadrat start
+            If rs!Transect_Length >= QuadratLocation + 2 Then
+                calculateQuadratsSampled = calculateQuadratsSampled + 1
+            Else
+                Exit Do
+            End If
+            'Quadrats are sampled every 5 meters, from 0 to 95
+            QuadratLocation = QuadratLocation + 5
+        Loop
+        rs.MoveNext
+    Loop
+              
+Exit_Function:
+    rs.Close
+    Set rs = Nothing
+    Set db = Nothing
+    Exit Function
+
+Err_Handler:
+    Select Case Err.Number
+      Case Else
+        MsgBox "Error #" & Err.Number & ": " & Err.Description, vbCritical, _
+            "Error encountered (#" & Err.Number & " - calculateQuadratsSampled[Form_frm_Summary_Reports])"
+    End Select
+    Resume Exit_Function
+
+End Function

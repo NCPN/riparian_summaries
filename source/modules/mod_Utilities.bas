@@ -1184,3 +1184,69 @@ Else
 End If
 NothingZ = varResult
 End Function
+' --------------------------------------------------------------------------------------------
+' Sub:          clearResultTables
+' Description:  Removes all records from result tables.
+' Assumptions:  -
+' Parameters:   -
+' Returns:      -
+' Throws:       -
+' References:   -
+' Source/date:  Helen Thomas, 3/11/2019
+' Adapted:      -
+' Revisions:
+' ----------------------------------------------------------------------------------------------
+Public Sub clearResultTables()
+On Error GoTo Err_Handler
+
+    DoCmd.SetWarnings False
+
+    DoCmd.OpenQuery "qry_Clear_Basal_Area"
+    DoCmd.OpenQuery "qry_Clear_Closure_Overstory"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_All"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_All_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Lifeform"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Lifeform_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Live"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Live_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Nativity"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Nativity_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Surface"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Surface_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Totals"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Totals_GS"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Wetland"
+    DoCmd.OpenQuery "qry_Clear_Cover_Pct_Wetland_GS"
+    DoCmd.OpenQuery "qry_Clear_Exotic_Frequency"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_All"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_Lifeform"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_Live"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_Nativity"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_Totals"
+    DoCmd.OpenQuery "qry_Clear_GL_Cover_Pct_Wetland"
+    DoCmd.OpenQuery "qry_Clear_OT_Trees"
+    DoCmd.OpenQuery "qry_Clear_Pebble_Summary"
+    DoCmd.OpenQuery "qry_Clear_Pebbles"
+    DoCmd.OpenQuery "qry_Clear_Reach_Species"
+    DoCmd.OpenQuery "qry_Clear_SR_Reach"
+    DoCmd.OpenQuery "qry_Clear_SR_Richness"
+    DoCmd.OpenQuery "qry_Clear_Tree_Density"
+    DoCmd.OpenQuery "qry_Clear_Tree_Size_Class"
+    DoCmd.OpenQuery "qry_Clear_Tree_Species_Density"
+    DoCmd.OpenQuery "qry_Clear_Wetland_Richness"
+
+    DoCmd.SetWarnings True
+    Debug.Print "Finished clearing result tables."
+
+Exit_Sub:
+    Exit Sub
+
+Err_Handler:
+    Select Case Err.Number
+      Case Else
+        MsgBox "Error #" & Err.Number & ": " & Err.Description, vbCritical, _
+            "Error encountered (#" & Err.Number & " - clearResultTables[mod_Utilities])"
+    End Select
+    Resume Exit_Sub
+
+End Sub
